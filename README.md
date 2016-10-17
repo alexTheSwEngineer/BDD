@@ -1,2 +1,2 @@
-## In memory entity framework testing helpers
+# Entity framework testing helpers
 

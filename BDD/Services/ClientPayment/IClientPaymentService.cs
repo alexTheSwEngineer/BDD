@@ -13,6 +13,6 @@ namespace Services.Accounting.ClientPayment
     /// </summary>
     public interface IClientPaymentService
     {
-        void MakePayment(PaymentRequest request);
+        void MakePayment(decimal amount);
     }
 }

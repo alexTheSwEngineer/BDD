@@ -14,7 +14,7 @@ namespace Services.Accounting
 {
     public partial class ClientPaymentService : IClientPaymentService
     {
-        private const decimal ExistingDebtFeeRate = 0.3m;
+        private const decimal ExistingDebtFeeRate =0.25m;
         private readonly IDataContext _dataContext;
         private readonly ISystemUser _systemUser;
 
@@ -24,27 +24,20 @@ namespace Services.Accounting
             _dataContext = dataContext;
             _systemUser = systemUser;
         }
-        public void MakePayment(PaymentRequest request)
+        public void MakePayment(decimal paymentAmount)
         {
             //Nasty dependancy on previous db state
             var existingDebt = _dataContext.PaymentItems.GetAll()
-                                               .Where(x => x.Amount < 0)
-                                               .Sum(x => x.Amount);
+                                           .Where(x => x.Amount < 0)
+                                           .Sum(x => x.Amount);
 
-            var payment = new Domain.Accounting.Payment
+            var paymentItem = new PaymentItem
             {
-                Date = request.Date,
-                PaymentItems = new List<PaymentItem>()
-                {
-                    new PaymentItem
-                    {
-                        Amount = request.Amount+existingDebt*ExistingDebtFeeRate,
-                    }
-                }
+                Amount = paymentAmount + existingDebt * ExistingDebtFeeRate,
             };
-            
 
-            _dataContext.Payments.Add(payment);
+
+            _dataContext.PaymentItems.Add(paymentItem);
             _dataContext.SaveChanges();
         }
     }
