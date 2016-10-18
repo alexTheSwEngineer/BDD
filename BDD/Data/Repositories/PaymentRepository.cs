@@ -8,12 +8,21 @@ using System.Threading.Tasks;
 
 namespace Data
 {
-    class PaymentRepository : RepositoryBase<Payment>, IPaymentRepository
+    public class PaymentRepository : RepositoryBase<Payment>, IPaymentRepository
     {
+        public PaymentRepository() { }
         public PaymentRepository(DbContext dbContext) : base(dbContext) { }
-        public decimal VeryComplexSumOfAllPaymentItems(int id)
+
+        public decimal TotalDebt()
         {
-            return DbContext.Set<PaymentItem>().Where(x => x.PaymentId == id).Sum(x=>x.Amount);
+            var total  = Total();
+            return total < 0 ?Math.Abs( total) : 0m;
+        }
+        
+
+        public decimal Total()
+        {
+            return DbContext.Set<PaymentItem>().Sum(x => x.Amount);
         }
     }
 }

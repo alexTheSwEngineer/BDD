@@ -12,7 +12,7 @@ namespace Data
         {
             Database.SetInitializer<EfDbContext>(null);
         }
-
+        public EfDbContext() { }
         public EfDbContext(string connString) : base(connString) { }
         
 

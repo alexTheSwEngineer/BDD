@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Examples
 {
-    public class DerivedTestCase:BaseTestCase<DerivedTestCase,decimal,decimal,decimal>
+    public class ExampleTestCase:BaseTestCase<ExampleTestCase,decimal,decimal,decimal>
     {
     }
 }

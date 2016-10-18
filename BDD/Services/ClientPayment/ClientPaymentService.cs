@@ -26,16 +26,31 @@ namespace Services.Accounting
         }
         public void MakePayment(decimal paymentAmount)
         {
-            //Nasty dependancy on previous db state
-            var existingDebt = _dataContext.PaymentItems.GetAll()
-                                           .Where(x => x.Amount < 0)
-                                           .Sum(x => x.Amount);
-
             var paymentItem = new PaymentItem
             {
-                Amount = paymentAmount + existingDebt * ExistingDebtFeeRate,
+                Amount = paymentAmount,
             };
 
+            _dataContext.PaymentItems.Add(paymentItem);
+            _dataContext.SaveChanges();
+
+        }
+
+        public PaymentItem MakePaymentBlackBox(decimal paymentAmount)
+        {
+            return new PaymentItem
+            {
+                Amount = paymentAmount,
+            };
+        }
+
+        public void MakePaymentNastyDependancy(decimal paymentAmount)
+        {
+            var debt = _dataContext.Payments.TotalDebt();
+            var fee =debt * ExistingDebtFeeRate;
+
+            var paymentItem = MakePaymentBlackBox(paymentAmount);
+            paymentItem.AddFee(fee);
 
             _dataContext.PaymentItems.Add(paymentItem);
             _dataContext.SaveChanges();

@@ -14,5 +14,7 @@ namespace Services.Accounting.ClientPayment
     public interface IClientPaymentService
     {
         void MakePayment(decimal amount);
+        PaymentItem MakePaymentBlackBox(decimal amount);
+        void MakePaymentNastyDependancy(decimal amount);
     }
 }

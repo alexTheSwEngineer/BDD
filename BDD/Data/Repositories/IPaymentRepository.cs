@@ -9,6 +9,7 @@ namespace Data
 {
     public interface IPaymentRepository : IRepository<Payment>
     {
-        decimal VeryComplexSumOfAllPaymentItems(int id);
+        decimal TotalDebt();
+        decimal Total();
     }
 }
